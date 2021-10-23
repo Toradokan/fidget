@@ -1,25 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import useSound from 'use-sound';
+import onSound from './assets/sounds/switch-on.mp3';
+import offSound from './assets/sounds/switch-off.mp3';
 import './App.css';
 
 function App() {
+  const [lightsOn, setLightsOn] = useState(true);
+
+  const [switchOn] = useSound(onSound);
+  const [switchOff] = useSound(offSound);
+
+  useEffect(() => {
+    setLightsOn(false);
+  }, []);
+
+  function toggleSwitch() {
+    if (lightsOn) {
+      setLightsOn(false);
+      switchOff();
+    } else {
+      setLightsOn(true);
+      switchOn();
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className={lightsOn ? 'room lights-on' : 'room lights-off'}>
+      {lightsOn ? (
+        <div className="surround on">
+          <div className="switch">
+            <div className="button"></div>
+            <div className="button-face" onClick={toggleSwitch}>
+              <div className="shadow"></div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="surround">
+          <div className="switch">
+            <div className="button"></div>
+            <div className="button-face" onClick={toggleSwitch}>
+              <div className="shadow"></div>
+            </div>
+          </div>
+        </div>
+      )}
+    </main>
   );
 }
 
